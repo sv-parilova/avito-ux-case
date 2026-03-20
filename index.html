@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Авито — Персоны и сценарии</title>
+<style>
+  /* ── DESIGN TOKENS ── */
+  :root {
+    --bg-page:       #F5F4F0;
+    --bg-primary:    #FFFFFF;
+    --bg-secondary:  #F1F0EC;
+    --bg-tertiary:   #E8E7E2;
+
+    --text-primary:   #1A1A18;
+    --text-secondary: #5C5B57;
+    --text-tertiary:  #9A9890;
+
+    --border-subtle:  rgba(0,0,0,0.09);
+    --border-medium:  rgba(0,0,0,0.16);
+
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+
+    /* semantic */
+    --friction-bg:  #FAECE7;
+    --friction-fg:  #8B3218;
+    --friction-bdr: #F0C4B4;
+    --ok-bg:        #E6F4E8;
+    --ok-fg:        #1E6B32;
+    --ok-bdr:       #B6DFC0;
+    --emotion-bg:   #F3F0FB;
+    --emotion-fg:   #5340A8;
+    --emotion-bdr:  #D4CDEE;
+
+    /* persona accent colours */
+    --c1-bg: #E6F1FB; --c1-fg: #185FA5; --c1-bdr: #B5D4F4;
+    --c2-bg: #FAEEDA; --c2-fg: #7A4808; --c2-bdr: #F5C87A;
+    --c3-bg: #E8F5EC; --c3-fg: #1E6B32; --c3-bdr: #B6DFC0;
+
+    --font: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-page:       #131312;
+      --bg-primary:    #1E1E1C;
+      --bg-secondary:  #272724;
+      --bg-tertiary:   #2E2E2B;
+
+      --text-primary:   #EEECEA;
+      --text-secondary: #A09E99;
+      --text-tertiary:  #6A6865;
+
+      --border-subtle:  rgba(255,255,255,0.08);
+      --border-medium:  rgba(255,255,255,0.14);
+
+      --friction-bg:  #2E1A14; --friction-fg: #F4A080; --friction-bdr: #5A2A1A;
+      --ok-bg:        #112318;  --ok-fg: #72D491;        --ok-bdr: #1E4D28;
+      --emotion-bg:   #1C1630; --emotion-fg: #B8ADEE;    --emotion-bdr: #352B60;
+
+      --c1-bg: #0C2A48; --c1-fg: #7EC2F8; --c1-bdr: #1A4870;
+      --c2-bg: #2E1E04; --c2-fg: #F5C87A; --c2-bdr: #5A3A0A;
+      --c3-bg: #0D2416; --c3-fg: #72D491; --c3-bdr: #1A4828;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { font-size: 15px; }
+
+  body {
+    margin: 0;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── LAYOUT ── */
+  .shell {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    margin-bottom: 2rem;
+  }
+  .page-eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin-bottom: 0.5rem;
+  }
+  .page-eyebrow::before {
+    content: '';
+    display: inline-block; width: 6px; height: 6px;
+    border-radius: 50%; background: #00AAFF;
+  }
+  .page-title {
+    font-size: 22px; font-weight: 600;
+    color: var(--text-primary); margin: 0 0 0.3rem;
+    letter-spacing: -0.02em;
+  }
+  .page-subtitle {
+    font-size: 13px; color: var(--text-secondary);
+  }
+
+  /* ── NAV TABS ── */
+  .nav {
+    display: flex; gap: 6px; margin-bottom: 1.75rem;
+    flex-wrap: wrap; padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .nav-btn {
+    padding: 6px 14px; border-radius: 20px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-primary);
+    cursor: pointer; font-size: 12.5px; font-weight: 500;
+    color: var(--text-secondary); transition: all .15s;
+    font-family: var(--font);
+    white-space: nowrap;
+  }
+  .nav-btn:hover { border-color: var(--border-medium); color: var(--text-primary); }
+  .nav-btn.active {
+    background: var(--text-primary); color: var(--bg-primary);
+    border-color: transparent;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin: 1.1rem 0 0.4rem;
+  }
+
+  /* ── PERSONA CARD ── */
+  .persona-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .persona-header {
+    display: flex; gap: 16px; align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  .avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
+  .av1 { background: var(--c1-bg); color: var(--c1-fg); border: 1px solid var(--c1-bdr); }
+  .av2 { background: var(--c2-bg); color: var(--c2-fg); border: 1px solid var(--c2-bdr); }
+  .av3 { background: var(--c3-bg); color: var(--c3-fg); border: 1px solid var(--c3-bdr); }
+
+  .persona-name { font-size: 16px; font-weight: 600; color: var(--text-primary); margin: 0 0 2px; }
+  .persona-role { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 8px; }
+
+  .badge-row { display: flex; gap: 5px; flex-wrap: wrap; }
+  .badge {
+    font-size: 11px; padding: 2px 9px; border-radius: 20px;
+    font-weight: 500; border: 1px solid transparent;
+  }
+  .badge-1 { background: var(--c1-bg); color: var(--c1-fg); border-color: var(--c1-bdr); }
+  .badge-2 { background: var(--c2-bg); color: var(--c2-fg); border-color: var(--c2-bdr); }
+  .badge-3 { background: var(--c3-bg); color: var(--c3-fg); border-color: var(--c3-bdr); }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    border-left: 3px solid var(--border-medium);
+    padding: 0.55rem 0.9rem;
+    margin: 0.9rem 0;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.65;
+    background: var(--bg-secondary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  /* ── GRIDS ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  @media (max-width: 600px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .grid3 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ── MINI CARDS ── */
+  .mini-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.6rem 0.75rem;
+    font-size: 12.5px;
+    color: var(--text-primary);
+    line-height: 1.55;
+  }
+  .mini-card + .mini-card { margin-top: 6px; }
+  .lbl {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin-bottom: 3px;
+  }
+
+  /* ── MENTAL MODEL ── */
+  .mental-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.7rem 0.85rem;
+    font-size: 12.5px;
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+  .mental-card::before {
+    content: '💭';
+    font-style: normal;
+    margin-right: 6px;
+    font-size: 13px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 1.25rem 0;
+  }
+
+  /* ── SCENARIO HEADER ── */
+  .scenario-wrap { margin-top: 0.25rem; }
+  .scenario-header-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 1.1rem 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+  .sc-eyebrow {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin-bottom: 4px;
+  }
+  .sc-title {
+    font-size: 15px; font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+    line-height: 1.4;
+  }
+  .sc-meta-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+  }
+  @media (max-width: 600px) { .sc-meta-grid { grid-template-columns: 1fr; } }
+  .sc-meta-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.7rem;
+    font-size: 12px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+  .sc-meta-item .lbl { margin-bottom: 2px; }
+
+  /* ── STEP TIMELINE ── */
+  .timeline { position: relative; }
+  .timeline-line {
+    position: absolute; left: 19px; top: 0; bottom: 0;
+    width: 1px; background: var(--border-subtle);
+    pointer-events: none;
+  }
+
+  .step {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 0.85rem 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    margin-bottom: 6px;
+    position: relative; z-index: 1;
+  }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .sn1 { background: var(--c1-bg); color: var(--c1-fg); border: 1px solid var(--c1-bdr); }
+  .sn2 { background: var(--c2-bg); color: var(--c2-fg); border: 1px solid var(--c2-bdr); }
+  .sn3 { background: var(--c3-bg); color: var(--c3-fg); border: 1px solid var(--c3-bdr); }
+
+  .step-body { flex: 1; min-width: 0; }
+  .step-action {
+    font-size: 13.5px; font-weight: 600;
+    color: var(--text-primary); margin: 0 0 4px;
+    line-height: 1.4;
+  }
+  .step-detail {
+    font-size: 12.5px; color: var(--text-secondary);
+    line-height: 1.6; margin: 0 0 6px;
+  }
+  .step-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+
+  /* ── TAG PILLS ── */
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 9px; border-radius: 20px;
+    border: 1px solid transparent;
+    line-height: 1.4;
+  }
+  .tag-friction {
+    background: var(--friction-bg);
+    color: var(--friction-fg);
+    border-color: var(--friction-bdr);
+  }
+  .tag-friction::before { content: '⚡'; font-size: 10px; }
+  .tag-ok {
+    background: var(--ok-bg);
+    color: var(--ok-fg);
+    border-color: var(--ok-bdr);
+  }
+  .tag-ok::before { content: '✓'; font-size: 10px; font-weight: 700; }
+  .tag-emotion {
+    background: var(--emotion-bg);
+    color: var(--emotion-fg);
+    border-color: var(--emotion-bdr);
+    font-style: italic;
+  }
+  .tag-emotion::before { content: '💬'; font-size: 10px; }
+
+  /* ── OUTCOME GRID ── */
+  .outcome-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+    margin-top: 1rem;
+  }
+  @media (max-width: 600px) { .outcome-grid { grid-template-columns: 1fr; } }
+  .oc-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.7rem 0.85rem;
+  }
+  .oc-card:nth-child(1) { border-top: 2px solid var(--c3-fg); }
+  .oc-card:nth-child(2) { border-top: 2px solid var(--friction-fg); }
+  .oc-card:nth-child(3) { border-top: 2px solid #5340A8; }
+  .oc-lbl {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin-bottom: 4px;
+  }
+  .oc-val { font-size: 12.5px; color: var(--text-primary); line-height: 1.55; }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-eyebrow">UX Research · Alan Cooper</div>
+    <h1 class="page-title">Авито — Персоны и пользовательские сценарии</h1>
+    <p class="page-subtitle">3 персоны &nbsp;·&nbsp; 3 развёрнутых сценария &nbsp;·&nbsp; Точки трения и успешные моменты</p>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <button class="nav-btn active" onclick="show('personas')">Персоны</button>
+    <button class="nav-btn" onclick="show('sc1')">Сценарий 1 — Вика</button>
+    <button class="nav-btn" onclick="show('sc2')">Сценарий 2 — Дмитрий</button>
+    <button class="nav-btn" onclick="show('sc3')">Сценарий 3 — Светлана</button>
+  </nav>
+
+  <!-- ═══════════ ПЕРСОНЫ ═══════════ -->
+  <div id="personas">
+
+    <!-- P1: Вика -->
+    <div class="persona-card">
+      <div class="persona-header">
+        <div class="avatar av1">ВК</div>
+        <div>
+          <p class="persona-name">Вика Киселёва</p>
+          <p class="persona-role">26 лет · Воронеж · Менеджер маркетплейса, работает из дома</p>
+          <div class="badge-row">
+            <span class="badge badge-1">Продаёт</span>
+            <span class="badge badge-1">iPhone / ПК</span>
+            <span class="badge badge-1">Активный пользователь</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-block">"Я хочу скинуть лишнее — детские вещи, гаджеты, которые не использую — и получить деньги быстро, без лишних звонков."</div>
+
+      <div class="grid2">
+        <div>
+          <div class="section-label">Цели</div>
+          <div class="mini-card"><div class="lbl">Практическая</div>Продать товар за 1–3 дня, получить деньги без встречи — через доставку</div>
+          <div class="mini-card"><div class="lbl">Личная</div>Разместить объявление за 5 минут, пока ребёнок спит</div>
+        </div>
+        <div>
+          <div class="section-label">Страхи и триггеры отказа</div>
+          <div class="mini-card">Покупатель окажется мошенником или не заберёт товар</div>
+          <div class="mini-card">Долго ждать модерации, объявление не показывается</div>
+          <div class="mini-card">Звонят незнакомые люди, просят личный номер</div>
+        </div>
+      </div>
+
+      <div class="section-label">Ментальная модель</div>
+      <div class="mental-card">Авито = «виртуальный комиссионный магазин». Верит, что система защищает её как продавца: скрывает номер, фильтрует спам. Не читает FAQ — ориентируется по иконкам. Путается, когда интерфейс меняется между версиями.</div>
+
+      <div class="section-label">Контекст использования</div>
+      <div class="grid3">
+        <div class="mini-card"><div class="lbl">Устройство</div>iPhone 13, только мобильное приложение</div>
+        <div class="mini-card"><div class="lbl">Когда</div>После 22:00, перерывы в рабочий день</div>
+        <div class="mini-card"><div class="lbl">Частота</div>2–3 активные продажи в месяц</div>
+      </div>
+    </div>
+
+    <!-- P2: Дмитрий -->
+    <div class="persona-card">
+      <div class="persona-header">
+        <div class="avatar av2">ДМ</div>
+        <div>
+          <p class="persona-name">Дмитрий Матвеев</p>
+          <p class="persona-role">41 год · Екатеринбург · Владелец небольшого автосервиса</p>
+          <div class="badge-row">
+            <span class="badge badge-2">Покупает запчасти</span>
+            <span class="badge badge-2">Android</span>
+            <span class="badge badge-2">Опытный</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-block">"Мне нужны конкретные детали по конкретной марке, б/у, в хорошем состоянии. Не хочу разбирать 40 объявлений — хочу сразу позвонить и договориться."</div>
+
+      <div class="grid2">
+        <div>
+          <div class="section-label">Цели</div>
+          <div class="mini-card"><div class="lbl">Практическая</div>Найти запчасть за &lt;30 минут, по телефону проверить состояние</div>
+          <div class="mini-card"><div class="lbl">Деловая</div>Купить дешевле нового на 40–60%, получить сегодня или завтра</div>
+        </div>
+        <div>
+          <div class="section-label">Страхи и триггеры отказа</div>
+          <div class="mini-card">Продавец не берёт трубку или пишет «продано» без снятия объявления</div>
+          <div class="mini-card">Нет чёткого фото детали, артикула или года выпуска</div>
+          <div class="mini-card">Слишком много перекупщиков с накрученной ценой</div>
+        </div>
+      </div>
+
+      <div class="section-label">Ментальная модель</div>
+      <div class="mental-card">Авито = «электронный авторынок», где «свои» продают другим «своим». Доверяет фото и звонку больше, чем рейтингу. Не использует чат — сразу звонит. Раздражается, если фильтры сбрасываются при перезапуске.</div>
+
+      <div class="section-label">Контекст использования</div>
+      <div class="grid3">
+        <div class="mini-card"><div class="lbl">Устройство</div>Samsung Galaxy A54, приложение + иногда браузер ПК</div>
+        <div class="mini-card"><div class="lbl">Когда</div>Утром 8–9, обед, по пути на склад</div>
+        <div class="mini-card"><div class="lbl">Частота</div>3–5 раз в неделю, пиково в сезон</div>
+      </div>
+    </div>
+
+    <!-- P3: Светлана -->
+    <div class="persona-card">
+      <div class="persona-header">
+        <div class="avatar av3">СН</div>
+        <div>
+          <p class="persona-name">Светлана Новикова</p>
+          <p class="persona-role">54 года · Краснодар · Учитель русского языка, пенсионер мужа на иждивении</p>
+          <div class="badge-row">
+            <span class="badge badge-3">Покупает</span>
+            <span class="badge badge-3">Планшет / иногда ПК</span>
+            <span class="badge badge-3">Редкий пользователь</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-block">"Хочу купить стиральную машину б/у, недорого. Боюсь, что меня обманут или я неправильно что-то нажму."</div>
+
+      <div class="grid2">
+        <div>
+          <div class="section-label">Цели</div>
+          <div class="mini-card"><div class="lbl">Практическая</div>Купить рабочую технику с доставкой, не переплатив за новую</div>
+          <div class="mini-card"><div class="lbl">Эмоциональная</div>Чувствовать себя защищённой: знать, что есть гарантия возврата</div>
+        </div>
+        <div>
+          <div class="section-label">Страхи и триггеры отказа</div>
+          <div class="mini-card">Мошенники: «предоплата», «доставка» — слышала истории от подруг</div>
+          <div class="mini-card">Не понимает, как работает доставка Авито — кто отвечает, если сломают</div>
+          <div class="mini-card">Интерфейс меняется, кнопки не там, где были</div>
+        </div>
+      </div>
+
+      <div class="section-label">Ментальная модель</div>
+      <div class="mental-card">Авито = «газета объявлений в телефоне». Не разделяет «Авито Доставку» и «привезёт сам продавец». Воспринимает иконку замка как гарантию безопасности сделки — хотя это только верификация аккаунта. Медленно читает мелкий текст, увеличивает шрифт в настройках.</div>
+
+      <div class="section-label">Контекст использования</div>
+      <div class="grid3">
+        <div class="mini-card"><div class="lbl">Устройство</div>Lenovo-планшет 10", браузер Safari</div>
+        <div class="mini-card"><div class="lbl">Когда</div>Выходные, утро, спокойная обстановка дома</div>
+        <div class="mini-card"><div class="lbl">Частота</div>1–2 раза в год, крупные покупки</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ СЦЕНАРИЙ 1 ═══════════ -->
+  <div id="sc1" class="hidden scenario-wrap">
+    <div class="scenario-header-card">
+      <div class="sc-eyebrow">Персона 1 · Вика Киселёва</div>
+      <div class="sc-title">Продать детский велосипед через Авито Доставку — не встречаясь с покупателем</div>
+      <div class="sc-meta-grid">
+        <div class="sc-meta-item"><div class="lbl">Триггер</div>Дочь выросла, велосипед занимает место. Вика видит рекламу «Авито Доставка» в Instagram</div>
+        <div class="sc-meta-item"><div class="lbl">Контекст</div>22:30, дочь спит. iPhone, приложение. Велосипед рядом — можно сразу сфотографировать</div>
+        <div class="sc-meta-item"><div class="lbl">Цель сессии</div>Разместить объявление с фото, включить доставку, установить цену</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-line"></div>
+
+      <div class="step">
+        <div class="step-num sn1">1</div>
+        <div class="step-body">
+          <div class="step-action">Открывает приложение → кнопка «Разместить объявление»</div>
+          <div class="step-detail">Нажимает большую оранжевую кнопку внизу. Выбирает: Детский мир → Велосипеды. Приложение предлагает шаблон с полями «Бренд», «Размер колёс», «Год». Вика заполняет только три поля — торопится.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Чувствует себя уверенно — делала раньше</span>
+            <span class="tag tag-ok">Всё понятно</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn1">2</div>
+        <div class="step-body">
+          <div class="step-action">Добавляет фотографии — прямо из камеры</div>
+          <div class="step-detail">Делает 4 фото: вид сбоку, педали, руль, наклейка с размером. Одно фото тёмное — переснимает, включив свет в коридоре. Загружает без перехода в галерею.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Лёгкое раздражение из-за тёмного фото, но справляется</span>
+            <span class="tag tag-ok">Интуитивно</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn1">3</div>
+        <div class="step-body">
+          <div class="step-action">Включает «Авито Доставку» — и зависает на экране условий</div>
+          <div class="step-detail">Тоггл «Доставка» включён по умолчанию — хорошо. Но появляется экран с условиями на 8 абзацев: ответственность, упаковка, страховка. Вика скроллит вниз и нажимает «Принять». Не читает: «Ну и ладно, Авито же не обманет».</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Когнитивная перегрузка, доверие бренду спасает</span>
+            <span class="tag tag-friction">Точка трения: стена текста не читается — риск юридического непонимания</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn1">4</div>
+        <div class="step-body">
+          <div class="step-action">Устанавливает цену — сравнивает с похожими объявлениями</div>
+          <div class="step-detail">Приложение показывает «Рекомендуемая цена: 2 400–3 100 ₽». Видит похожие объявления в горизонтальном скролле. Ставит 2 800 ₽. Замечает кнопку «Быстрая продажа — снизить до 2 400» — отклоняет: «Подожду, не срочно».</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Приятно чувствовать контроль над ценой</span>
+            <span class="tag tag-ok">Функция сравнения цен работает хорошо</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn1">5</div>
+        <div class="step-body">
+          <div class="step-action">Публикует — и не понимает, прошло ли модерацию</div>
+          <div class="step-detail">Нажимает «Опубликовать». Экран «Объявление на проверке». Ждёт. Через 2 минуты проверяет профиль — статус «На модерации». Через 20 минут push: «Объявление опубликовано». Вика идёт спать.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Тревога в ожидании: «Почему так долго? Что-то не так?»</span>
+            <span class="tag tag-friction">Точка трения: нет прогресс-индикатора и ожидаемого времени модерации</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn1">6</div>
+        <div class="step-body">
+          <div class="step-action">На следующий день — первый чат-запрос, подозрительный</div>
+          <div class="step-detail">«Привет! Переведите задаток на карту и я сразу заберу.» Авито выделяет сообщение жёлтой плашкой «Возможно мошенничество». Вика нажимает «Пожаловаться» — одной кнопкой. Чувствует, что система её защитила.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Сначала страх, потом облегчение благодаря предупреждению</span>
+            <span class="tag tag-ok">Антифрод-предупреждение работает как надо</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn1">7</div>
+        <div class="step-body">
+          <div class="step-action">Реальная сделка: упаковка и передача в ПВЗ</div>
+          <div class="step-detail">Покупатель оформляет доставку. Авито присылает пошаговую инструкцию по упаковке с фото. Вика едет в ПВЗ СДЭК. Деньги приходят через 3 дня после получения покупателем.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">«Всё как обещали, без звонков, без встречи с незнакомцем»</span>
+            <span class="tag tag-ok">Сценарий завершён успешно</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="outcome-grid">
+      <div class="oc-card">
+        <div class="oc-lbl">Результат</div>
+        <div class="oc-val">Велосипед продан за 2 800 ₽ без личной встречи, за 2 дня</div>
+      </div>
+      <div class="oc-card">
+        <div class="oc-lbl">Ключевые точки трения</div>
+        <div class="oc-val">Стена текста об условиях доставки + непрозрачное ожидание модерации</div>
+      </div>
+      <div class="oc-card">
+        <div class="oc-lbl">Что сработало хорошо</div>
+        <div class="oc-val">Рекомендация цены, антифрод-плашка, пошаговая инструкция упаковки</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ СЦЕНАРИЙ 2 ═══════════ -->
+  <div id="sc2" class="hidden scenario-wrap">
+    <div class="scenario-header-card">
+      <div class="sc-eyebrow">Персона 2 · Дмитрий Матвеев</div>
+      <div class="sc-title">Найти и купить рулевую рейку для Toyota Camry V40 до конца рабочего дня</div>
+      <div class="sc-meta-grid">
+        <div class="sc-meta-item"><div class="lbl">Триггер</div>Клиент пригнал машину — рейка течёт. Новая стоит 28 000 ₽, надо найти б/у до 8 000 ₽</div>
+        <div class="sc-meta-item"><div class="lbl">Контекст</div>8:15 утра, Дмитрий в машине у сервиса. Android, приложение. Пьёт кофе, 15 минут до открытия</div>
+        <div class="sc-meta-item"><div class="lbl">Цель сессии</div>Найти деталь → позвонить → договориться о самовывозе сегодня</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-line"></div>
+
+      <div class="step">
+        <div class="step-num sn2">1</div>
+        <div class="step-body">
+          <div class="step-action">Поиск: вводит «рулевая рейка Camry V40»</div>
+          <div class="step-detail">Вводит с ошибкой: «камри v40 рейка». Авито корректирует автоматически. Выдаёт 47 объявлений. Сразу открывает фильтры: Екатеринбург, радиус 50 км, цена до 8 000 ₽. Остаётся 9 объявлений.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Привычные действия — делает на автопилоте</span>
+            <span class="tag tag-ok">Автокоррекция и геофильтр работают</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn2">2</div>
+        <div class="step-body">
+          <div class="step-action">Скролл объявлений — выбирает по фото и цене, не по тексту</div>
+          <div class="step-detail">Пропускает объявления без фото (3 шт.). Пропускает фото «из интернета». Останавливается на двух: 6 500 ₽ с фото патрубков и 7 200 ₽ с фото VIN-таблички рядом с деталью. Второе вызывает больше доверия.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">«По фото сразу видно — свой или перекуп»</span>
+            <span class="tag tag-friction">Точка трения: нет фильтра «только с реальными фото» или «от физлица»</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn2">3</div>
+        <div class="step-body">
+          <div class="step-action">Открывает объявление за 7 200 ₽ — ищет номер телефона</div>
+          <div class="step-detail">Скроллит мимо описания. Находит «Показать номер». Копирует вручную в телефон. Звонит. Трубку берут сразу. Задаёт три вопроса: артикул, сальники, когда забрать.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Доволен: человек берёт трубку — редкость</span>
+            <span class="tag tag-friction">Точка трения: нет кнопки «Позвонить напрямую» без ручного копирования номера</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn2">4</div>
+        <div class="step-body">
+          <div class="step-action">Продавец сбрасывает артикул в чат — Дмитрий не замечает</div>
+          <div class="step-detail">После звонка продавец пишет артикул в чате Авито. Уведомление приходит, но Дмитрий уже ищет его в Google. Теряет 5 минут. Только потом видит сообщение в Авито.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Раздражение: «Зачем пишет, если я попросил голосом?»</span>
+            <span class="tag tag-friction">Точка трения: разрыв между звонком и чатом — нет единого лога переговоров</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn2">5</div>
+        <div class="step-body">
+          <div class="step-action">Договаривается о самовывозе — «бронирует» в чате</div>
+          <div class="step-detail">Продавец предлагает отложить до 16:00. Дмитрий пишет: «Ок, буду в 15:30». Авито не фиксирует договорённость структурировано. Дмитрий делает скриншот переписки на всякий случай.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">«Договорился — но вдруг продаст кому-то другому?»</span>
+            <span class="tag tag-friction">Точка трения: нет функции «Забронировано» / подтверждения внутри Авито</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn2">6</div>
+        <div class="step-body">
+          <div class="step-action">Самовывоз в 15:30 — деталь в порядке, платит наличными</div>
+          <div class="step-detail">Едет по адресу. Деталь совпадает с фото. Проверяет маркировку. Платит 7 200 ₽ наличными. Продавец просит отзыв. Дмитрий нажимает «5 звёзд» за 10 секунд, ничего не пишет.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Удовлетворение от быстро закрытой задачи</span>
+            <span class="tag tag-ok">Сценарий завершён, клиент уедет сегодня</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="outcome-grid">
+      <div class="oc-card">
+        <div class="oc-lbl">Результат</div>
+        <div class="oc-val">Деталь найдена и куплена за 6,5 часов, сэкономлено ~20 000 ₽</div>
+      </div>
+      <div class="oc-card">
+        <div class="oc-lbl">Ключевые точки трения</div>
+        <div class="oc-val">Разрыв звонок/чат, нет бронирования, нет фильтра «от физлица»</div>
+      </div>
+      <div class="oc-card">
+        <div class="oc-lbl">Что сработало хорошо</div>
+        <div class="oc-val">Автокоррекция запроса, геофильтр, быстрый доступ к номеру продавца</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ СЦЕНАРИЙ 3 ═══════════ -->
+  <div id="sc3" class="hidden scenario-wrap">
+    <div class="scenario-header-card">
+      <div class="sc-eyebrow">Персона 3 · Светлана Новикова</div>
+      <div class="sc-title">Купить б/у стиральную машину с доставкой — без встречи с незнакомым человеком</div>
+      <div class="sc-meta-grid">
+        <div class="sc-meta-item"><div class="lbl">Триггер</div>Сломалась машина. Подруга посоветовала Авито — купила там холодильник. Светлана решает попробовать</div>
+        <div class="sc-meta-item"><div class="lbl">Контекст</div>Воскресенье, 10:00. Планшет на кухне. Муж рядом — «советует». 2 чашки чая</div>
+        <div class="sc-meta-item"><div class="lbl">Цель сессии</div>Найти стиралку до 8 000 ₽ с доставкой от проверенного продавца</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-line"></div>
+
+      <div class="step">
+        <div class="step-num sn3">1</div>
+        <div class="step-body">
+          <div class="step-action">Вводит в поиск «стиральная машина б/у недорого краснодар»</div>
+          <div class="step-detail">Набирает медленно, полностью, без сокращений. Авито выдаёт 200+ объявлений. Светлана пугается. Муж советует «фильтры». Вместе ставят: цена до 8 000, город Краснодар. Результатов стало 34.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Тревога от количества, облегчение после фильтрации</span>
+            <span class="tag tag-friction">Точка трения: интерфейс фильтров на планшете — кнопки мелкие, нужна прокрутка</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn3">2</div>
+        <div class="step-body">
+          <div class="step-action">Листает — выбирает по фото и значку «Авито Доставка»</div>
+          <div class="step-detail">Не читает описания. Замечает голубой значок «Авито Доставка». Спрашивает мужа: «Это значит они надёжные?» Муж: «Наверное». Открывает три объявления со значком.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Значок «Доставка» воспринимается как знак безопасности, а не логистики</span>
+            <span class="tag tag-friction">Точка трения: семантическая ошибка — доставка ≠ проверенный продавец</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn3">3</div>
+        <div class="step-body">
+          <div class="step-action">Читает объявление — очень медленно и внимательно</div>
+          <div class="step-detail">Indesit, 2019 г., 5 кг, б/у 1 год, 6 500 ₽. Продавец — физлицо, рейтинг 4.8, 12 отзывов. Светлана читает все 12. Один нейтральный («долго отвечал») настораживает. Муж: «Ничего страшного».</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Педантичное чтение — попытка минимизировать риск</span>
+            <span class="tag tag-ok">Система отзывов дала нужное доверие после изучения</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn3">4</div>
+        <div class="step-body">
+          <div class="step-action">Пишет продавцу в чат — звонить не хочет</div>
+          <div class="step-detail">«Здравствуйте! Машина ещё продаётся? Можно с доставкой? Мы в Прикубанском районе.» Ждёт ответа 40 минут. Нервничает. Продавец отвечает: «Да, Авито Доставка работает, 350 ₽.»</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">40 минут ожидания — пик тревоги: «Может, уже продал?»</span>
+            <span class="tag tag-friction">Точка трения: нет индикатора «онлайн» / «обычно отвечает за X минут» на видном месте</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn3">5</div>
+        <div class="step-body">
+          <div class="step-action">Нажимает «Купить с доставкой» — сталкивается с формой оплаты</div>
+          <div class="step-detail">6 500 + 350 = 6 850 ₽. Видит форму карты. Пугается: «А если взломают?» Закрывает. Муж объясняет, что Авито держит деньги до получения. Возвращается и вводит карту.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Страх оплаты — максимальное напряжение всего сценария</span>
+            <span class="tag tag-friction">Точка трения: форма оплаты без объяснения эскроу — слишком поздно</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn3">6</div>
+        <div class="step-body">
+          <div class="step-action">Оплата прошла — ждёт звонка от курьера</div>
+          <div class="step-detail">SMS и push: «Заказ №... принят. Продавец упакует в течение 24 ч, затем курьер свяжется с вами.» Светлана записывает номер заказа на листочке. Через день курьер: «Завтра с 14 до 18».</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">После SMS стало спокойнее — есть номер, есть конкретика</span>
+            <span class="tag tag-ok">SMS-подтверждение критично важно для этой персоны</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num sn3">7</div>
+        <div class="step-body">
+          <div class="step-action">Машина привезена — подтверждает получение в приложении</div>
+          <div class="step-detail">Курьер привозит, помогает занести. Светлана нажимает «Подтвердить получение». Приложение: «Товар соответствует описанию?» — Да. Деньги уходят продавцу. Светлана пишет три предложения в отзыве.</div>
+          <div class="step-tags">
+            <span class="tag tag-emotion">Огромное облегчение: «Справилась сама, всё как надо»</span>
+            <span class="tag tag-ok">Сценарий завершён. Светлана расскажет подруге.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="outcome-grid">
+      <div class="oc-card">
+        <div class="oc-lbl">Результат</div>
+        <div class="oc-val">Машина куплена за 6 850 ₽, с доставкой, без личной встречи с продавцом</div>
+      </div>
+      <div class="oc-card">
+        <div class="oc-lbl">Ключевые точки трения</div>
+        <div class="oc-val">Страх оплаты без эскроу-объяснения + ложная семантика значка + 40 мин ожидания</div>
+      </div>
+      <div class="oc-card">
+        <div class="oc-lbl">Что сработало хорошо</div>
+        <div class="oc-val">Система отзывов, SMS-подтверждение с номером заказа, экран «Подтвердить получение»</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const sections = ['personas','sc1','sc2','sc3'];
+const btns = document.querySelectorAll('.nav-btn');
+function show(id) {
+  sections.forEach(s => document.getElementById(s).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  btns.forEach((b,i) => b.classList.toggle('active', sections[i] === id));
+}
+</script>
+</body>
+</html>
