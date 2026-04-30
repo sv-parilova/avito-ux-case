@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Авито — Персоны и сценарии</title>
+<title>Авито — Персоны и пользовательские сценарии</title>
 <style>
   /* ── DESIGN TOKENS ── */
   :root {
@@ -295,8 +295,6 @@
     margin-top: 1px;
   }
   .sn1 { background: var(--c1-bg); color: var(--c1-fg); border: 1px solid var(--c1-bdr); }
-  .sn2 { background: var(--c2-bg); color: var(--c2-fg); border: 1px solid var(--c2-bdr); }
-  .sn3 { background: var(--c3-bg); color: var(--c3-fg); border: 1px solid var(--c3-bdr); }
 
   .step-body { flex: 1; min-width: 0; }
   .step-action {
@@ -350,9 +348,6 @@
     border-radius: var(--radius-md);
     padding: 0.7rem 0.85rem;
   }
-  .oc-card:nth-child(1) { border-top: 2px solid var(--c3-fg); }
-  .oc-card:nth-child(2) { border-top: 2px solid var(--friction-fg); }
-  .oc-card:nth-child(3) { border-top: 2px solid #5340A8; }
   .oc-lbl {
     font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
     text-transform: uppercase; color: var(--text-tertiary);
@@ -370,15 +365,13 @@
   <div class="page-header">
     <div class="page-eyebrow">UX Research · Alan Cooper</div>
     <h1 class="page-title">Авито — Персоны и пользовательские сценарии</h1>
-    <p class="page-subtitle">3 персоны &nbsp;·&nbsp; 3 развёрнутых сценария &nbsp;·&nbsp; Точки трения и успешные моменты</p>
+    <p class="page-subtitle">3 персоны &nbsp;·&nbsp; 1 развёрнутый сценарий &nbsp;·&nbsp; Точки трения и успешные моменты</p>
   </div>
 
   <!-- NAV -->
   <nav class="nav" id="nav">
     <button class="nav-btn active" onclick="show('personas')">Персоны</button>
     <button class="nav-btn" onclick="show('sc1')">Сценарий 1 — Вика</button>
-    <button class="nav-btn" onclick="show('sc2')">Сценарий 2 — Дмитрий</button>
-    <button class="nav-btn" onclick="show('sc3')">Сценарий 3 — Светлана</button>
   </nav>
 
   <!-- ═══════════ ПЕРСОНЫ ═══════════ -->
@@ -390,7 +383,7 @@
         <div class="avatar av1">ВК</div>
         <div>
           <p class="persona-name">Вика Киселёва</p>
-          <p class="persona-role">26 лет · Воронеж · Менеджер маркетплейса, работает из дома</p>
+          <p class="persona-role">34 года · Воронеж · Менеджер маркетплейса, работает из дома</p>
           <div class="badge-row">
             <span class="badge badge-1">Продаёт</span>
             <span class="badge badge-1">iPhone / ПК</span>
@@ -426,93 +419,10 @@
       </div>
     </div>
 
-    <!-- P2: Дмитрий -->
-    <div class="persona-card">
-      <div class="persona-header">
-        <div class="avatar av2">ДМ</div>
-        <div>
-          <p class="persona-name">Дмитрий Матвеев</p>
-          <p class="persona-role">41 год · Екатеринбург · Владелец небольшого автосервиса</p>
-          <div class="badge-row">
-            <span class="badge badge-2">Покупает запчасти</span>
-            <span class="badge badge-2">Android</span>
-            <span class="badge badge-2">Опытный</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="quote-block">"Мне нужны конкретные детали по конкретной марке, б/у, в хорошем состоянии. Не хочу разбирать 40 объявлений — хочу сразу позвонить и договориться."</div>
-
-      <div class="grid2">
-        <div>
-          <div class="section-label">Цели</div>
-          <div class="mini-card"><div class="lbl">Практическая</div>Найти запчасть за &lt;30 минут, по телефону проверить состояние</div>
-          <div class="mini-card"><div class="lbl">Деловая</div>Купить дешевле нового на 40–60%, получить сегодня или завтра</div>
-        </div>
-        <div>
-          <div class="section-label">Страхи и триггеры отказа</div>
-          <div class="mini-card">Продавец не берёт трубку или пишет «продано» без снятия объявления</div>
-          <div class="mini-card">Нет чёткого фото детали, артикула или года выпуска</div>
-          <div class="mini-card">Слишком много перекупщиков с накрученной ценой</div>
-        </div>
-      </div>
-
-      <div class="section-label">Ментальная модель</div>
-      <div class="mental-card">Авито = «электронный авторынок», где «свои» продают другим «своим». Доверяет фото и звонку больше, чем рейтингу. Не использует чат — сразу звонит. Раздражается, если фильтры сбрасываются при перезапуске.</div>
-
-      <div class="section-label">Контекст использования</div>
-      <div class="grid3">
-        <div class="mini-card"><div class="lbl">Устройство</div>Samsung Galaxy A54, приложение + иногда браузер ПК</div>
-        <div class="mini-card"><div class="lbl">Когда</div>Утром 8–9, обед, по пути на склад</div>
-        <div class="mini-card"><div class="lbl">Частота</div>3–5 раз в неделю, пиково в сезон</div>
-      </div>
-    </div>
-
-    <!-- P3: Светлана -->
-    <div class="persona-card">
-      <div class="persona-header">
-        <div class="avatar av3">СН</div>
-        <div>
-          <p class="persona-name">Светлана Новикова</p>
-          <p class="persona-role">54 года · Краснодар · Учитель русского языка, пенсионер мужа на иждивении</p>
-          <div class="badge-row">
-            <span class="badge badge-3">Покупает</span>
-            <span class="badge badge-3">Планшет / иногда ПК</span>
-            <span class="badge badge-3">Редкий пользователь</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="quote-block">"Хочу купить стиральную машину б/у, недорого. Боюсь, что меня обманут или я неправильно что-то нажму."</div>
-
-      <div class="grid2">
-        <div>
-          <div class="section-label">Цели</div>
-          <div class="mini-card"><div class="lbl">Практическая</div>Купить рабочую технику с доставкой, не переплатив за новую</div>
-          <div class="mini-card"><div class="lbl">Эмоциональная</div>Чувствовать себя защищённой: знать, что есть гарантия возврата</div>
-        </div>
-        <div>
-          <div class="section-label">Страхи и триггеры отказа</div>
-          <div class="mini-card">Мошенники: «предоплата», «доставка» — слышала истории от подруг</div>
-          <div class="mini-card">Не понимает, как работает доставка Авито — кто отвечает, если сломают</div>
-          <div class="mini-card">Интерфейс меняется, кнопки не там, где были</div>
-        </div>
-      </div>
-
-      <div class="section-label">Ментальная модель</div>
-      <div class="mental-card">Авито = «газета объявлений в телефоне». Не разделяет «Авито Доставку» и «привезёт сам продавец». Воспринимает иконку замка как гарантию безопасности сделки — хотя это только верификация аккаунта. Медленно читает мелкий текст, увеличивает шрифт в настройках.</div>
-
-      <div class="section-label">Контекст использования</div>
-      <div class="grid3">
-        <div class="mini-card"><div class="lbl">Устройство</div>Lenovo-планшет 10", браузер Safari</div>
-        <div class="mini-card"><div class="lbl">Когда</div>Выходные, утро, спокойная обстановка дома</div>
-        <div class="mini-card"><div class="lbl">Частота</div>1–2 раза в год, крупные покупки</div>
-      </div>
-    </div>
   </div>
 
-   <!-- ═══════════ СЦЕНАРИЙ 1 ═══════════ -->
-  <div id="sc1" class="scenario-wrap">
+  <!-- ═══════════ СЦЕНАРИЙ 1 ═══════════ -->
+  <div id="sc1" class="hidden scenario-wrap">
     <div class="scenario-header-card">
       <div class="sc-eyebrow">Персона 1 · Вика Киселёва</div>
       <div class="sc-title">Продать детский велосипед через Авито Доставку — быстро и без звонков и встреч</div>
@@ -613,15 +523,10 @@
     </div>
   </div>
 
- 
-      </div>
-    </div>
-  </div>
-
 </div>
 
 <script>
-const sections = ['personas','sc1','sc2','sc3'];
+const sections = ['personas','sc1'];
 const btns = document.querySelectorAll('.nav-btn');
 function show(id) {
   sections.forEach(s => document.getElementById(s).classList.add('hidden'));
